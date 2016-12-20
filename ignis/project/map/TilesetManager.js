@@ -34,6 +34,18 @@ class TilesetManager {
 
         this.tilesetList = tsListTMP;
     }
+
+    setTileset(tileset,index) {
+        if (tileset != null) {
+            tileset.setIndex(index);
+        }
+        this.tilesetList[index] = tileset;
+    }
+
+    getTilesetAtIndex(index) {
+        return index > -1 ? this.tilesetList[index] : null;
+    }
+
 }
 
 module.exports = TilesetManager;

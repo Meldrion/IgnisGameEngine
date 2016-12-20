@@ -20,3 +20,4 @@ function readFile(path,filename) {
 }
 
 module.exports = readFile;
+module.exports = convertPath;
