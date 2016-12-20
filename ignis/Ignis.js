@@ -8,6 +8,7 @@ class Ignis {
     constructor(width,height) {
 
         let testGame = new Game("/home/fabien/ignis/EndlessSorrow");
+        testGame.load();
 
         //Create the renderer
         var renderer = PIXI.autoDetectRenderer(width,height);

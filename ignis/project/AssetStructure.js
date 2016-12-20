@@ -1,7 +1,7 @@
 "use strict";
 
 
-var convertPath = require("../engine/FileSystem.js");
+var FileSystem = require("../engine/FileSystem.js");
 
 /**
  *
@@ -243,7 +243,7 @@ class AssetStructure {
      * @returns {Array.<T>|Buffer|string}
      */
     getAsset() {
-        return convertPath(this.rootPath, AssetStructure.ASSET);
+        return FileSystem.convertPath(this.rootPath, AssetStructure.ASSET);
     }
 
     /**
@@ -252,7 +252,7 @@ class AssetStructure {
      * @returns {Array.<T>|Buffer|string}
      */
     getPath(assetName) {
-        return convertPath(this.getAsset(), assetName != null ? assetName.toLowerCase() : "not valid");
+        return FileSystem.convertPath(this.getAsset(), assetName != null ? assetName.toLowerCase() : "not valid");
     }
 
     /**
@@ -260,7 +260,7 @@ class AssetStructure {
      * @returns {Array.<T>|Buffer|string}
      */
     getProjectJSON() {
-        return convertPath(this.rootPath, "project.json");
+        return FileSystem.convertPath(this.rootPath, "project.json");
     }
 
 }

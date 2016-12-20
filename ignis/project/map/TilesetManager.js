@@ -2,8 +2,7 @@
 
 var Tileset = require("./Tileset.js");
 var Terrain = require("./Terrain.js");
-var readFile = require("../../engine/FileSystem.js");
-var convertPath = require("../../engine/FileSystem.js");
+var FileSystem = require("../../engine/FileSystem.js");
 
 /**
  *
@@ -59,11 +58,11 @@ class TilesetManager {
 
         for (let i = 0; i < maxCount; i++) {
             if (i < cMax) {
-                tsListTMP.append(this.tilesetList[i]);
+                tsListTMP.push(this.tilesetList[i]);
             } else {
                 let ts = new Tileset();
                 ts.setIndex(i);
-                tsListTMP.append(ts);
+                tsListTMP.push(ts);
             }
         }
 
@@ -96,7 +95,8 @@ class TilesetManager {
      */
     load() {
 
-        let jsonFile = readFile(this.jsonFolder, TilesetManager.TILETREEFILE);
+        let jsonFile = FileSystem.readFile(this.jsonFolder, TilesetManager.TILETREEFILE);
+        console.log(jsonFile);
         let tilesetListJSON = JSON.parse(jsonFile);
 
         this.setTilesetMax(tilesetListJSON.tilesets.length);
@@ -109,7 +109,7 @@ class TilesetManager {
             current.setIndex(i);
             current.setName(tileset.name);
 
-            current.loadImage(convertPath(this.tilesetFolder,tileset.image));
+            current.loadImage(FileSystem.convertPath(this.tilesetFolder,tileset.image));
             let terrains = tileset.terrain;
 
             for (let ti = 0; ti < terrains.length; ti++) {
@@ -119,7 +119,7 @@ class TilesetManager {
                 let fileName = currentTerrainJson.filename;
                 let newTerrain = new Terrain();
 
-                newTerrain.loadImage(convertPath(this.terrainFolder, fileName));
+                newTerrain.loadImage(FileSystem.convertPath(this.terrainFolder, fileName));
                 current.setTerrain(terrainIndexTileset, newTerrain);
             }
 

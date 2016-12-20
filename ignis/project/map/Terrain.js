@@ -12,4 +12,4 @@ class Terrain {
 
 }
 
-module.exports = Terrain();
+module.exports = Terrain;

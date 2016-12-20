@@ -17,9 +17,13 @@ class IgnisGame {
         this.tilesetManager.setTilesetFolder(this.assetStructure.getPath(AssetStructure.TILESET));
         this.tilesetManager.setTerrainFolder(this.assetStructure.getPath(AssetStructure.TERRAIN));
         this.tilesetManager.setJSONFolder(this.assetStructure.getPath(AssetStructure.JSON));
-
         this.rootPath = basePath;
     }
+
+    load() {
+        this.tilesetManager.load();
+    }
+
 
 }
 
