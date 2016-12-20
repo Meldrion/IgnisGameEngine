@@ -8,6 +8,10 @@ class Tileset {
         this.index = index;
     }
 
+    loadImage(imagePath) {
+
+    }
+
 }
 
 module.exports = Tileset;

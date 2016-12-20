@@ -1,22 +1,57 @@
-var Tileset = require("./Tileset.js");
+"use strict";
 
+var Tileset = require("./Tileset.js");
+var Terrain = require("./Terrain.js");
+var readFile = require("../../engine/FileSystem.js");
+var convertPath = require("../../engine/FileSystem.js");
+
+/**
+ *
+ */
 class TilesetManager {
+
+    /**
+     * @return {string}
+     */
+    static get TILETREEFILE() {
+        return "tiletree.json";
+    }
+
+    /**
+     *
+     */
     constructor() {
         this.tilesetList = []
     }
 
+    /**
+     *
+     * @param jsonFolder
+     */
     setJSONFolder(jsonFolder) {
         this.jsonFolder = jsonFolder;
     }
 
+    /**
+     *
+     * @param terrainFolder
+     */
     setTerrainFolder(terrainFolder) {
         this.terrainFolder = terrainFolder;
     }
 
+    /**
+     *
+     * @param tilesetFolder
+     */
     setTilesetFolder(tilesetFolder) {
         this.tilesetFolder = tilesetFolder;
     }
 
+    /**
+     *
+     * @param maxCount
+     */
     setTilesetMax(maxCount) {
 
         let cMax = this.tilesetList.length;
@@ -35,15 +70,67 @@ class TilesetManager {
         this.tilesetList = tsListTMP;
     }
 
-    setTileset(tileset,index) {
+    /**
+     *
+     * @param tileset
+     * @param index
+     */
+    setTileset(tileset, index) {
         if (tileset != null) {
             tileset.setIndex(index);
         }
         this.tilesetList[index] = tileset;
     }
 
+    /**
+     *
+     * @param index
+     * @returns {null}
+     */
     getTilesetAtIndex(index) {
         return index > -1 ? this.tilesetList[index] : null;
+    }
+
+    /**
+     *
+     */
+    load() {
+
+        let jsonFile = readFile(this.jsonFolder, TilesetManager.TILETREEFILE);
+        let tilesetListJSON = JSON.parse(jsonFile);
+
+        this.setTilesetMax(tilesetListJSON.tilesets.length);
+
+        for (let i = 0; i < tilesetListJSON.tilesets.length; i++) {
+
+            let tileset = tilesetListJSON.tilesets[i];
+            let current = this.tilesetList[i];
+
+            current.setIndex(i);
+            current.setName(tileset.name);
+
+            current.loadImage(convertPath(this.tilesetFolder,tileset.image));
+            let terrains = tileset.terrain;
+
+            for (let ti = 0; ti < terrains.length; ti++) {
+
+                let currentTerrainJson = terrains[i];
+                let terrainIndexTileset = currentTerrainJson.index;
+                let fileName = currentTerrainJson.filename;
+                let newTerrain = new Terrain();
+
+                newTerrain.loadImage(convertPath(this.terrainFolder, fileName));
+                current.setTerrain(terrainIndexTileset, newTerrain);
+            }
+
+            for (let j = 0; j < tileset.blocking.length; j++) {
+
+                let collisionLine = tileset.blocking[j];
+                let x = collisionLine.x;
+                let y = collisionLine.y;
+                current.setCollisionAt(x, y, true);
+            }
+        }
     }
 
 }
