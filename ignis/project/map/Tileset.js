@@ -1,8 +1,11 @@
+var PIXI = require("../../../modules/pixi.js");
+
 class Tileset {
 
     constructor() {
         this.index = -1;
         this.name = "";
+        this.cellSize = 32;
         this.terrainCells = [null,null,null,null,null,null,null,null];
         this.collisionMatrix = [[]];
     }
@@ -14,7 +17,7 @@ class Tileset {
         for (let x = 0;x < tmpCollisionMatrix.length;x++) {
             let tmpInnerCollisionMatrix = new Array(this.getCellHeight(newImage));
 
-            for (let y = 0;y < tmpCollisionMatrix[0].length;y++) {
+            for (let y = 0;y < tmpInnerCollisionMatrix.length;y++) {
 
                 if (this.collisionMatrix != null && this.inRange(x,y)) {
                     tmpInnerCollisionMatrix[y] = this.collisionMatrix[x][y];
@@ -22,6 +25,7 @@ class Tileset {
                     tmpInnerCollisionMatrix[y] = false;
                 }
             }
+            tmpCollisionMatrix.push(tmpInnerCollisionMatrix);
         }
 
         this.collisionMatrix = tmpCollisionMatrix;
@@ -39,10 +43,14 @@ class Tileset {
         this.index = index;
     }
 
-    loadImage(imagePath) {
-        let newTsImage = null; // Up to Change
-        this.initCollisionMatrix(newTsImage);
-        this.tilesetImage = newTsImage;
+    loadImage(imagePath,callback) {
+
+        let self = this;
+        this.tilesetImage = PIXI.Texture.fromImage(imagePath);
+        this.tilesetImage.on("update",function() {
+            self.initCollisionMatrix(self.tilesetImage);
+            callback();
+        });
     }
 
     setTerrain(index,terrain) {
@@ -58,7 +66,7 @@ class Tileset {
     }
 
     getCellWidth(tsImage) {
-        return tsImage != null ? tsImage.getWidth() / this.cellSize : 0;
+        return tsImage != null ? tsImage.width / this.cellSize : 0;
     }
 
     getCellHeight() {
@@ -66,7 +74,7 @@ class Tileset {
     }
 
     getCellHeight(tsImage) {
-        return tsImage != null ? tsImage.getHeight() / this.cellSize + 1: 0;
+        return tsImage != null ? tsImage.height / this.cellSize + 1: 0;
     }
 
 }

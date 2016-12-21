@@ -95,41 +95,49 @@ class TilesetManager {
      */
     load() {
 
+        let self = this;
         let jsonFile = FileSystem.readFile(this.jsonFolder, TilesetManager.TILETREEFILE);
-        console.log(jsonFile);
         let tilesetListJSON = JSON.parse(jsonFile);
 
         this.setTilesetMax(tilesetListJSON.tilesets.length);
 
         for (let i = 0; i < tilesetListJSON.tilesets.length; i++) {
 
-            let tileset = tilesetListJSON.tilesets[i];
+            let tilesetJSON = tilesetListJSON.tilesets[i];
             let current = this.tilesetList[i];
 
             current.setIndex(i);
-            current.setName(tileset.name);
+            current.setName(tilesetJSON.name);
 
-            current.loadImage(FileSystem.convertPath(this.tilesetFolder,tileset.image));
-            let terrains = tileset.terrain;
+            if (tilesetJSON.image && tilesetJSON.image.length !== null) {
+                current.loadImage(FileSystem.convertPath(this.tilesetFolder, tilesetJSON.image), function () {
+                    self.loadCollisionData(current, tilesetJSON);
+                });
+            }
+
+/*            // Load the Terrain Data
+            let terrains = tilesetJSON.terrain;
 
             for (let ti = 0; ti < terrains.length; ti++) {
 
                 let currentTerrainJson = terrains[i];
                 let terrainIndexTileset = currentTerrainJson.index;
-                let fileName = currentTerrainJson.filename;
                 let newTerrain = new Terrain();
 
-                newTerrain.loadImage(FileSystem.convertPath(this.terrainFolder, fileName));
+                newTerrain.loadImage(FileSystem.convertPath(this.terrainFolder, currentTerrainJson.filename));
                 current.setTerrain(terrainIndexTileset, newTerrain);
-            }
+            }*/
+        }
+    }
 
-            for (let j = 0; j < tileset.blocking.length; j++) {
+    loadCollisionData(current,tilesetJSON) {
 
-                let collisionLine = tileset.blocking[j];
-                let x = collisionLine.x;
-                let y = collisionLine.y;
-                current.setCollisionAt(x, y, true);
-            }
+        for (let j = 0; j < tilesetJSON.blocking.length; j++) {
+
+            let collisionLine = tilesetJSON.blocking[j];
+            let x = collisionLine.x;
+            let y = collisionLine.y;
+            current.setCollisionAt(x, y, true);
         }
     }
 
