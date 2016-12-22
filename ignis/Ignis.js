@@ -17,13 +17,13 @@ class Ignis {
         //Create a container object called the `stage`
         this.stage = new PIXI.Container();
 
-/*        // create a texture from an image path
+       // create a texture from an image path
         var texture = PIXI.Texture.fromImage('./res/cave.png');
 
         // create a new Sprite using the texture
         var testImage = new PIXI.Sprite(texture);
 
-        this.stage.addChild(testImage);*/
+        this.stage.addChild(testImage);
         this.render();
 
     }

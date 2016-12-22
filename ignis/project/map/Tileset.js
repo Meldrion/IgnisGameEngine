@@ -1,3 +1,5 @@
+"use strict";
+
 var PIXI = require("../../../modules/pixi.js");
 
 class Tileset {
@@ -25,7 +27,8 @@ class Tileset {
                     tmpInnerCollisionMatrix[y] = false;
                 }
             }
-            tmpCollisionMatrix.push(tmpInnerCollisionMatrix);
+
+            tmpCollisionMatrix[x] = tmpInnerCollisionMatrix;
         }
 
         this.collisionMatrix = tmpCollisionMatrix;
