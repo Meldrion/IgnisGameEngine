@@ -4,14 +4,21 @@ var PIXI = require("../../../modules/pixi.js");
 
 class Tileset {
 
+    /**
+     *
+     */
     constructor() {
         this.index = -1;
         this.name = "";
         this.cellSize = 32;
-        this.terrainCells = [null,null,null,null,null,null,null,null];
+        this.terrainCells = new Array(8);
         this.collisionMatrix = [[]];
     }
 
+    /**
+     *
+     * @param newImage
+     */
     initCollisionMatrix(newImage) {
 
         let tmpCollisionMatrix = new Array(this.getCellWidth(newImage));
@@ -34,18 +41,37 @@ class Tileset {
         this.collisionMatrix = tmpCollisionMatrix;
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @returns {boolean}
+     */
     inRange(x,y) {
         return x < this.getCellWidth() && y < this.getCellHeight();
     }
 
+    /**
+     *
+     * @param name
+     */
     setName(name) {
         this.name = name;
     }
 
+    /**
+     *
+     * @param index
+     */
     setIndex(index) {
         this.index = index;
     }
 
+    /**
+     *
+     * @param imagePath
+     * @param callback
+     */
     loadImage(imagePath,callback) {
 
         let self = this;
@@ -56,26 +82,55 @@ class Tileset {
         });
     }
 
+    /**
+     *
+     * @param index
+     * @param terrain
+     */
     setTerrain(index,terrain) {
         this.terrainCells[index] = terrain;
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @param collision
+     */
     setCollisionAt(x,y,collision) {
         this.collisionMatrix[x][y] = collision;
     }
 
+    /**
+     *
+     * @returns {*}
+     */
     getCellWidth() {
         return this.getCellWidth(this.tilesetImage);
     }
 
+    /**
+     *
+     * @param tsImage
+     * @returns {number}
+     */
     getCellWidth(tsImage) {
         return tsImage != null ? tsImage.width / this.cellSize : 0;
     }
 
+    /**
+     *
+     * @returns {*}
+     */
     getCellHeight() {
         return this.getCellHeight(this.tilesetImage);
     }
 
+    /**
+     *
+     * @param tsImage
+     * @returns {number}
+     */
     getCellHeight(tsImage) {
         return tsImage != null ? tsImage.height / this.cellSize + 1: 0;
     }

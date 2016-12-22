@@ -1,13 +1,43 @@
+var Asset = require("./Asset.js");
+var FileSystem = require("../engine/FileSystem.js");
+
+
+/**
+ *
+ */
 class AssetCategory {
 
-    constructor() {
+    /**
+     *
+     * @param assetBaseFolder
+     */
+    constructor(assetBaseFolder) {
+        this.assetBaseFolder = assetBaseFolder;
         this.assetList = {};
     }
 
-    add(assetName,asset) {
-        if (this.assetList[assetName] === undefined) {
-            console.log("Key does not exist");
+    /**
+     *
+     * @param assetName
+     * @returns {*}
+     */
+    add(assetName) {
+        let asset = this.assetList[assetName];
+
+        if (asset === undefined) {
+            asset = new Asset(FileSystem.convertPath(this.assetBaseFolder,assetName));
+            this.assetList[assetName] = asset;
         }
+
+        return asset;
+    }
+
+    /**
+     *
+     * @param assetName
+     */
+    remove(assetName) {
+        this.assetList[assetName] = undefined;
     }
 
 }
