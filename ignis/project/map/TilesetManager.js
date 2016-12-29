@@ -19,8 +19,9 @@ class TilesetManager {
     /**
      *
      */
-    constructor() {
-        this.tilesetList = []
+    constructor(assetManager) {
+        this.tilesetList = [];
+        this.assetManager = assetManager;
     }
 
     /**
@@ -29,22 +30,6 @@ class TilesetManager {
      */
     setJSONFolder(jsonFolder) {
         this.jsonFolder = jsonFolder;
-    }
-
-    /**
-     *
-     * @param terrainFolder
-     */
-    setTerrainFolder(terrainFolder) {
-        this.terrainFolder = terrainFolder;
-    }
-
-    /**
-     *
-     * @param tilesetFolder
-     */
-    setTilesetFolder(tilesetFolder) {
-        this.tilesetFolder = tilesetFolder;
     }
 
     /**
@@ -110,7 +95,7 @@ class TilesetManager {
             current.setName(tilesetJSON.name);
 
             if (tilesetJSON.image && tilesetJSON.image.length !== null) {
-                current.loadImage(FileSystem.convertPath(this.tilesetFolder, tilesetJSON.image), function () {
+                current.loadImage(this.assetManager,tilesetJSON.image, function () {
                     self.loadCollisionData(current, tilesetJSON);
                 });
             }

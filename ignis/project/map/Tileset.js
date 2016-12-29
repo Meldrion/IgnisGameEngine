@@ -1,6 +1,6 @@
 "use strict";
 
-var PIXI = require("../../../modules/pixi.js");
+var AssetManager = require("../AssetManager.js");
 
 class Tileset {
 
@@ -8,6 +8,7 @@ class Tileset {
      *
      */
     constructor() {
+        this.tilesetImage = null;
         this.index = -1;
         this.name = "";
         this.cellSize = 32;
@@ -69,17 +70,13 @@ class Tileset {
 
     /**
      *
-     * @param imagePath
+     * @param assetManager
+     * @param imageName
      * @param callback
      */
-    loadImage(imagePath,callback) {
-
-        let self = this;
-        this.tilesetImage = PIXI.Texture.fromImage(imagePath);
-        this.tilesetImage.on("update",function() {
-            self.initCollisionMatrix(self.tilesetImage);
-            callback();
-        });
+    setImage(image) {
+        this.tilesetImage = image;
+        this.initCollisionMatrix(this.tilesetImage);
     }
 
     /**

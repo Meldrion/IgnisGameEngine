@@ -10,8 +10,10 @@ class AssetCategory {
     /**
      *
      * @param assetBaseFolder
+     * @param assetType
      */
-    constructor(assetBaseFolder) {
+    constructor(assetBaseFolder,assetType) {
+        this.assetType = assetType;
         this.assetBaseFolder = assetBaseFolder;
         this.assetList = {};
     }
@@ -19,13 +21,15 @@ class AssetCategory {
     /**
      *
      * @param assetName
+     * @param callback
      * @returns {*}
      */
-    add(assetName) {
+    add(assetName,callback) {
         let asset = this.assetList[assetName];
 
         if (asset === undefined) {
-            asset = new Asset(FileSystem.convertPath(this.assetBaseFolder,assetName));
+            asset = new Asset(FileSystem.convertPath(this.assetBaseFolder,assetName),this.assetType);
+            asset.load(callback);
             this.assetList[assetName] = asset;
         }
 

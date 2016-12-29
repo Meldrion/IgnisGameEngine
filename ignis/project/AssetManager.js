@@ -20,7 +20,7 @@ class AssetManager {
         let assetFolderNames = AssetStructure.getAssetFolderNames();
         for (let i=0;i<assetFolderNames.length;i++) {
             let folderName = assetFolderNames[i];
-            this.assetList[folderName] = new AssetCategory(this.assetStructure.getPath(folderName));
+            this.assetList[folderName] = new AssetCategory(this.assetStructure.getPath(folderName),folderName);
         }
     }
 
@@ -29,10 +29,11 @@ class AssetManager {
      * if the asset does not exist, it will be created
      * @param assetType
      * @param assetName
+     * @param callback
      */
-    loadAsset(assetType,assetName) {
+    loadAsset(assetType,assetName,callback) {
         let assetCategory = this.assetList[assetType];
-        return assetCategory.add(assetName);
+        return assetCategory.add(assetName,callback);
     }
 
 
